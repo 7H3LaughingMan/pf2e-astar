@@ -37,14 +37,14 @@ impl Wayfinder {
     }
 
     #[wasm_bindgen(js_name = findPath)]
-    pub fn find_path(&self, start: JsValue, end: JsValue) -> JsValue {
-        let start = serde_wasm_bindgen::from_value(start).unwrap();
-        let end = serde_wasm_bindgen::from_value(end).unwrap();
+    pub fn find_path(&self, path: JsValue, goal: JsValue) -> JsValue {
+        let path = serde_wasm_bindgen::from_value(path).unwrap();
+        let goal = serde_wasm_bindgen::from_value(goal).unwrap();
 
         let path = match &self.grid {
-            Grid::Gridless(gridless_grid) => gridless_grid.find_path(start, end, self.token_shape.offset, &self.edges),
-            Grid::Square(square_grid) => square_grid.find_path(start, end, self.token_shape.offset, &self.edges),
-            Grid::Hexagonal(hexagonal_grid) => hexagonal_grid.find_path(start, end, self.token_shape.offset, &self.edges),
+            Grid::Gridless(gridless_grid) => gridless_grid.find_path(path, goal, self.token_shape.offset, &self.edges),
+            Grid::Square(square_grid) => square_grid.find_path(path, goal, self.token_shape.offset, &self.edges),
+            Grid::Hexagonal(hexagonal_grid) => hexagonal_grid.find_path(path, goal, self.token_shape.offset, &self.edges),
         };
 
         serde_wasm_bindgen::to_value(&Wayfinder::simplify_path(path)).unwrap()
