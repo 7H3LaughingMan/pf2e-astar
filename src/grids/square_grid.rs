@@ -1,5 +1,5 @@
 use crate::{
-    exports::Edges, log, nodes::SquareNode, traits::{AStar, BaseGrid, Node, Value}, types::{Point, Polygon}
+    exports::Edges, nodes::SquareNode, traits::{AStar, BaseGrid, Node, Value}, types::{Point, Polygon}
 };
 use wasm_bindgen::JsValue;
 

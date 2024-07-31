@@ -1,9 +1,7 @@
 use crate::{
     enums::Grid,
     exports::{Edges, Image},
-    grids::{hexagonal_grid, SquareGrid},
-    log,
-    traits::{AStar, BaseGrid, Node},
+    traits::AStar,
     types::{Pixel, Point, Polygon, Rectangle},
 };
 use rapier2d::prelude::*;
