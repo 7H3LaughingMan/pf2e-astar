@@ -11,7 +11,3 @@ pub struct Pixel {
     pub b: u8,
     pub a: u8,
 }
-
-impl Pixel {
-    pub const RED: Pixel = Pixel { r: 255, g: 0, b: 0, a: 255 };
-}

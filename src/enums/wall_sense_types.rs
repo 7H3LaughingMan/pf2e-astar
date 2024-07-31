@@ -1,3 +1,4 @@
+#[allow(dead_code)]
 pub enum WallSenseTypes {
     None = 0,
     Limited = 10,

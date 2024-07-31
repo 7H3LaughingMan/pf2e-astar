@@ -1,5 +1,8 @@
 use crate::{
-    exports::Edges, nodes::SquareNode, traits::{AStar, BaseGrid, Node, Value}, types::{Point, Polygon}
+    exports::Edges,
+    nodes::SquareNode,
+    traits::{AStar, BaseGrid, Node, Value},
+    types::{Point, Polygon},
 };
 use wasm_bindgen::JsValue;
 
@@ -65,9 +68,20 @@ impl BaseGrid<SquareNode> for SquareGrid {
 }
 
 impl AStar for SquareGrid {
-    fn find_path(&self, start: Point, end: Point, offset: Point, edges: &Edges) -> Vec<Point> {
-        let start_node = self.get_node(start - offset);
-        let end_node = self.get_node(end - offset);
+    fn find_path(&self, path: Vec<Point>, goal: Point, offset: Point, edges: &Edges) -> Vec<Point> {
+        let mut path: Vec<SquareNode> = path.into_iter().map(|point| self.get_node(point - offset)).collect();
+
+        if path.is_empty() {
+            return Vec::new();
+        }
+
+        for idx in 1..path.len() {
+            let (left, right) = path.split_at_mut(idx);
+            right[idx].from(&left[idx - 1]);
+        }
+
+        let start_node = *path.last().unwrap();
+        let end_node = self.get_node(goal - offset);
 
         if start_node.at_node(&end_node) {
             return Vec::new();

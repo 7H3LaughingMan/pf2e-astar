@@ -4,12 +4,10 @@ use crate::{
     types::{Edge, Point, Rectangle},
     GAME,
 };
-use rapier2d::{
-    parry::query::{visitors, ShapeCastOptions},
-    prelude::*,
-};
+use rapier2d::{parry::query::ShapeCastOptions, prelude::*};
 use std::collections::HashMap;
 
+#[allow(dead_code)]
 pub struct Edges {
     bounds: Rectangle,
     colliders: ColliderSet,

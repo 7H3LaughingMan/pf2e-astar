@@ -1,5 +1,4 @@
 use crate::traits::Node;
-use rapier2d::na::Point2;
 use std::hash::Hash;
 
 #[derive(Clone, Copy)]

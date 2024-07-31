@@ -1,7 +1,7 @@
 use wasm_bindgen::JsValue;
 
 use crate::{
-    grids::{gridless_grid, hexagonal_grid, GridlessGrid, HexagonalGrid, SquareGrid},
+    grids::{GridlessGrid, HexagonalGrid, SquareGrid},
     traits::{BaseGrid, Value},
     types::{Point, Polygon},
     GAME,

@@ -1,5 +1,3 @@
-use rapier2d::na::Point2;
-
 use crate::traits::Node;
 use std::hash::Hash;
 

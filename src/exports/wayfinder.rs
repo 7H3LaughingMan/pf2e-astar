@@ -32,7 +32,7 @@ impl Wayfinder {
         let bounds: Rectangle = serde_wasm_bindgen::from_value(bounds).unwrap();
         let scaled_bounds: Rectangle = serde_wasm_bindgen::from_value(scaled_bounds).unwrap();
         let pixels: Vec<Pixel> = bytemuck::allocation::cast_vec(pixels.to_vec());
-        
+
         self.edges.explored = Some(Image { pixels, bounds, scaled_bounds });
     }
 

@@ -23,7 +23,7 @@ impl BaseGrid<GridlessNode> for GridlessGrid {
         let _ = offset;
         let _ = edges;
         let _ = node;
-        
+
         Vec::new()
     }
 
@@ -66,11 +66,11 @@ impl BaseGrid<GridlessNode> for GridlessGrid {
 }
 
 impl AStar for GridlessGrid {
-    fn find_path(&self, start: Point, end: Point, offset: Point, edges: &Edges) -> Vec<Point> {
-        let _ = edges;
+    fn find_path(&self, path: Vec<Point>, goal: Point, offset: Point, edges: &Edges) -> Vec<Point> {
+        let _ = path;
+        let _ = goal;
         let _ = offset;
-        let _ = end;
-        let _ = start;
+        let _ = edges;
 
         Vec::new()
     }

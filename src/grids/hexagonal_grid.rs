@@ -5,7 +5,6 @@ use crate::{
     traits::{AStar, BaseGrid, Node, Value},
     types::{Point, Polygon},
 };
-use rapier2d::parry::query::point;
 use wasm_bindgen::JsValue;
 
 pub struct HexagonalGrid {
@@ -398,8 +397,6 @@ impl BaseGrid<HexagonalNode> for HexagonalGrid {
                 let top_left = self.get_center_point(&self.get_node(center - offset_by));
                 offset = center - top_left;
             }
-
-            Point { x: (self.size as f32) / 2.0, y: (self.size as f32) / 2.0 };
         } else {
             offset = Point { x: 0.0, y: 0.0 }
         };
@@ -428,9 +425,15 @@ impl BaseGrid<HexagonalNode> for HexagonalGrid {
 }
 
 impl AStar for HexagonalGrid {
-    fn find_path(&self, start: Point, end: Point, offset: Point, edges: &Edges) -> Vec<Point> {
-        let start_node = self.get_node(start - offset);
-        let end_node = self.get_node(end - offset);
+    fn find_path(&self, path: Vec<Point>, goal: Point, offset: Point, edges: &Edges) -> Vec<Point> {
+        let path: Vec<HexagonalNode> = path.into_iter().map(|point| self.get_node(point - offset)).collect();
+
+        if path.is_empty() {
+            return Vec::new();
+        }
+
+        let start_node = *path.last().unwrap();
+        let end_node = self.get_node(goal - offset);
 
         if start_node.at_node(&end_node) {
             return Vec::new();

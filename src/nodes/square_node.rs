@@ -1,5 +1,3 @@
-use rapier2d::na::Point2;
-
 use crate::traits::Node;
 use std::hash::Hash;
 
@@ -18,6 +16,14 @@ impl SquareNode {
     pub fn new(i: i32, j: i32, d: bool) -> Self {
         Self { i, j, d }
     }
+
+    pub fn from(&mut self, origin: &SquareNode) {
+        let di = (origin.i - self.i).abs();
+        let dj = (origin.j - self.j).abs();
+        let nd = i32::min(di, dj) + if origin.d { 1 } else { 0 };
+
+        self.d = (nd & 1) == 1;
+    }
 }
 
 impl Node for SquareNode {
@@ -29,7 +35,7 @@ impl Node for SquareNode {
         let di = (self.i - other.i).abs();
         let dj = (self.j - other.j).abs();
 
-        let ns =(di - dj).abs();
+        let ns = (di - dj).abs();
         let nd = i32::min(di, dj);
         let cd = if self.d { ((nd + 1) & -2) + (nd >> 1) } else { (nd & -2) + ((nd + 1) >> 1) };
 

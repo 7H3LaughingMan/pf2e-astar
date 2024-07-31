@@ -1,3 +1,4 @@
+#[allow(dead_code)]
 pub enum HexagonalShapes {
     Ellipse1 = 0,
     Ellipse2 = 1,
