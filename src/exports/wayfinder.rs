@@ -49,7 +49,7 @@ impl Wayfinder {
             Grid::Hexagonal(hexagonal_grid) => hexagonal_grid.find_path(start, end, self.token_shape.offset, &self.edges),
         };
 
-        return serde_wasm_bindgen::to_value(&Wayfinder::simplify_path(path)).unwrap();
+        serde_wasm_bindgen::to_value(&Wayfinder::simplify_path(path)).unwrap()
     }
 
     fn simplify_path(nodes: Vec<Point>) -> Vec<Point> {
@@ -73,6 +73,6 @@ impl Wayfinder {
             }
         }
 
-        return nodes;
+        nodes
     }
 }

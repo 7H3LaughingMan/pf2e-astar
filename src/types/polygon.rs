@@ -12,7 +12,7 @@ pub struct Polygon {
 
 impl Polygon {
     pub fn centroid(points: &Vec<Point>) -> Point {
-        if points.len() == 0 {
+        if points.is_empty() {
             return Point { x: 0_f32, y: 0_f32 };
         }
 
@@ -36,7 +36,7 @@ impl Polygon {
         x /= a;
         y /= a;
 
-        return Point { x, y };
+        Point { x, y }
     }
 
     pub fn shrink(&self, size: Point) -> Polygon {
@@ -71,7 +71,7 @@ impl Polygon {
             vertices.push(Point2::<f32>::new(x, y));
         }
 
-        return vertices;
+        vertices
     }
 
     fn get_indices(&self) -> Vec<[u32; 2]> {
@@ -82,7 +82,7 @@ impl Polygon {
         }
         indices.push([self.points.len() as u32 - 1, 0]);
 
-        return indices;
+        indices
     }
 
     pub fn to_polyline(&self) -> Polyline {

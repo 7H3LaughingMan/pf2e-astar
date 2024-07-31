@@ -70,6 +70,6 @@ impl Edges {
             return true;
         }
 
-        return false;
+        false
     }
 }

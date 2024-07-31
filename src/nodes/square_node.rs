@@ -33,7 +33,7 @@ impl Node for SquareNode {
         let nd = i32::min(di, dj);
         let cd = if self.d { ((nd + 1) & -2) + (nd >> 1) } else { (nd & -2) + ((nd + 1) >> 1) };
 
-        return (ns + cd) as u32;
+        (ns + cd) as u32
     }
 
     fn get_neighbors(&self) -> Vec<(Self, u32)> {

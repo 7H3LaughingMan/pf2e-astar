@@ -17,8 +17,8 @@ pub struct HexagonalGrid {
 }
 
 impl HexagonalGrid {
-    const SQRT1_3: f32 = 0.577350258827209472656250000000000000_f32;
-    const SQRT3: f32 = 1.732050776481628417968750000000000000_f32;
+    const SQRT1_3: f32 = 0.577_350_26_f32;
+    const SQRT3: f32 = 1.732_050_8_f32;
 
     pub fn new(value: JsValue) -> Self {
         let size = value.get_value("size");
@@ -47,7 +47,7 @@ impl HexagonalGrid {
             is = -iq - ir;
         }
 
-        return HexagonalNode { q: iq as i32, r: ir as i32, s: is as i32 };
+        HexagonalNode { q: iq as i32, r: ir as i32, s: is as i32 }
     }
 
     fn get_hexagonal_shape(columns: bool, r#type: i32, width: f32, height: f32) -> Polygon {
@@ -89,7 +89,7 @@ impl HexagonalGrid {
             return HexagonalGrid::create_hexagonal_rectangle(r#type, width, height);
         }
 
-        return Polygon {
+        Polygon {
             center: Point { x: 0.0, y: 0.0 },
             offset: Point { x: 0.0, y: 0.0 },
             points: vec![
@@ -98,7 +98,7 @@ impl HexagonalGrid {
                 Point { x: (width / 2.0), y: (height / 2.0) },
                 Point { x: -(width / 2.0), y: (height / 2.0) },
             ],
-        };
+        }
     }
 
     fn create_hexagonal_ellipse_or_trapezoid(r#type: i32, width: f32, height: f32) -> Polygon {
@@ -212,7 +212,7 @@ impl HexagonalGrid {
         }
 
         let center = Polygon::centroid(&points);
-        return Polygon { center, offset, points };
+        Polygon { center, offset, points }
     }
 
     fn create_hexagonal_rectangle(r#type: i32, width: f32, height: f32) -> Polygon {
@@ -316,7 +316,7 @@ impl HexagonalGrid {
         }
 
         let center = Point { x: (width as f32) / 2.0, y: ((0.75 * f32::floor(height as f32)) + (0.5 * ((height as f32) % 1.0)) + 0.25) / 2.0 };
-        return Polygon { center, offset, points };
+        Polygon { center, offset, points }
     }
 }
 
@@ -346,7 +346,7 @@ impl BaseGrid<HexagonalNode> for HexagonalGrid {
         x *= self.size as f32;
         y *= self.size as f32;
 
-        return Point { x, y };
+        Point { x, y }
     }
 
     fn get_node(&self, point: Point) -> HexagonalNode {
@@ -366,7 +366,7 @@ impl BaseGrid<HexagonalNode> for HexagonalGrid {
             q = (-0.5 * (r + (if self.even { 1.0 } else { 0.0 }))) + x;
         }
 
-        return HexagonalGrid::cube_round(q, r, 0.0 - q - r);
+        HexagonalGrid::cube_round(q, r, 0.0 - q - r)
     }
 
     fn get_token_shape(&self, token: JsValue) -> Polygon {
@@ -406,7 +406,7 @@ impl BaseGrid<HexagonalNode> for HexagonalGrid {
 
         let token_shape = HexagonalGrid::get_hexagonal_shape(self.columns, hexagonal_shape, width, height);
 
-        if token_shape.points.len() > 0 {
+        if !token_shape.points.is_empty() {
             let grid_size = Point { x: self.size_x, y: self.size_y };
             let center = token_shape.center * grid_size;
             let points = token_shape.points.into_iter().map(|point| point * grid_size).collect();
@@ -416,7 +416,7 @@ impl BaseGrid<HexagonalNode> for HexagonalGrid {
 
         Polygon {
             center: Point { x: 0.0, y: 0.0 },
-            offset: offset,
+            offset,
             points: vec![
                 Point { x: -((width * self.size_x) / 2.0), y: -((height * self.size_y) / 2.0) },
                 Point { x: ((width * self.size_x) / 2.0), y: -((height * self.size_y) / 2.0) },
@@ -447,6 +447,6 @@ impl AStar for HexagonalGrid {
             return nodes.iter().map(|node| self.get_center_point(node) + offset).collect();
         }
 
-        return Vec::new();
+        Vec::new()
     }
 }

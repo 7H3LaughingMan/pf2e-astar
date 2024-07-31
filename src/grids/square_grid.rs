@@ -84,6 +84,6 @@ impl AStar for SquareGrid {
             return nodes.iter().map(|node| self.get_center_point(node) + offset).collect();
         }
 
-        return Vec::new();
+        Vec::new()
     }
 }

@@ -72,6 +72,6 @@ impl AStar for GridlessGrid {
         let _ = end;
         let _ = start;
 
-        return Vec::new();
+        Vec::new()
     }
 }

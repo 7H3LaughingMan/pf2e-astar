@@ -21,7 +21,7 @@ impl Grid {
         match r#type {
             0 => Grid::Gridless(GridlessGrid::new(grid)),
             1 => Grid::Square(SquareGrid::new(grid)),
-            2 | 3 | 4 | 5 => Grid::Hexagonal(HexagonalGrid::new(grid)),
+            2..=5 => Grid::Hexagonal(HexagonalGrid::new(grid)),
             type_ => panic!("Unknown Grid Type - {type_}"),
         }
     }
@@ -38,7 +38,7 @@ impl Grid {
         match self {
             Grid::Gridless(gridless_grid) => Point { x: gridless_grid.size as f32, y: gridless_grid.size as f32 },
             Grid::Square(square_grid) => Point { x: square_grid.size as f32, y: square_grid.size as f32 },
-            Grid::Hexagonal(hexagonal_grid) => Point { x: hexagonal_grid.size_x as f32, y: hexagonal_grid.size_y as f32 },
+            Grid::Hexagonal(hexagonal_grid) => Point { x: hexagonal_grid.size_x, y: hexagonal_grid.size_y },
         }
     }
 }
