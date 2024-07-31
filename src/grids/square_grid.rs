@@ -77,7 +77,7 @@ impl AStar for SquareGrid {
 
         for idx in 1..path.len() {
             let (left, right) = path.split_at_mut(idx);
-            right[idx].from(&left[idx - 1]);
+            right[0].from(&left[idx - 1]);
         }
 
         let start_node = *path.last().unwrap();
