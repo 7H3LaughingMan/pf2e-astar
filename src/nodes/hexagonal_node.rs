@@ -30,16 +30,20 @@ impl Node for HexagonalNode {
         ((dq.abs() + dr.abs() + (dq + dr).abs()) / 2) as u32
     }
 
-    fn get_neighbors(&self) -> Vec<(Self, u32)> {
+    fn get_neighbors(&self, end_node: &Self) -> Vec<(Self, u32)> {
         let HexagonalNode { q, r, s } = *self;
 
-        vec![
+        let mut neighbors = vec![
             (HexagonalNode::new(q, r - 1, s + 1), 1),
             (HexagonalNode::new(q + 1, r - 1, s), 1),
             (HexagonalNode::new(q + 1, r, s - 1), 1),
             (HexagonalNode::new(q, r + 1, s - 1), 1),
             (HexagonalNode::new(q - 1, r + 1, s), 1),
             (HexagonalNode::new(q - 1, r, s + 1), 1),
-        ]
+        ];
+
+        neighbors.sort_by(|a, b| a.0.get_distance(end_node).partial_cmp(&b.0.get_distance(end_node)).unwrap());
+
+        neighbors
     }
 }

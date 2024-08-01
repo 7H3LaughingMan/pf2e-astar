@@ -320,8 +320,8 @@ impl HexagonalGrid {
 }
 
 impl BaseGrid<HexagonalNode> for HexagonalGrid {
-    fn get_adjacent_nodes(&self, node: &HexagonalNode, edges: &Edges, offset: Point) -> Vec<(HexagonalNode, u32)> {
-        node.get_neighbors()
+    fn get_adjacent_nodes(&self, node: &HexagonalNode, end_node: &HexagonalNode, edges: &Edges, offset: Point) -> Vec<(HexagonalNode, u32)> {
+        node.get_neighbors(end_node)
             .into_iter()
             .filter(|(neighbor, _cost)| !edges.check_collision(self.get_center_point(node) + offset, self.get_center_point(neighbor) + offset))
             .collect()
@@ -441,7 +441,7 @@ impl AStar for HexagonalGrid {
 
         let result = pathfinding::prelude::astar(
             &start_node,
-            |node| self.get_adjacent_nodes(node, edges, offset),
+            |node| self.get_adjacent_nodes(node, &end_node, edges, offset),
             |node| node.get_distance(&end_node),
             |node| node.at_node(&end_node),
         );

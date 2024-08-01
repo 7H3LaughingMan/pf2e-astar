@@ -20,10 +20,13 @@ impl Node for GridlessNode {
 
     fn get_distance(&self, other: &Self) -> u32 {
         let _ = other;
+
         0
     }
 
-    fn get_neighbors(&self) -> Vec<(Self, u32)> {
+    fn get_neighbors(&self, goal: &Self) -> Vec<(Self, u32)> {
+        let _ = goal;
+
         Vec::new()
     }
 }

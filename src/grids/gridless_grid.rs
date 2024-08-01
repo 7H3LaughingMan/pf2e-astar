@@ -19,10 +19,11 @@ impl GridlessGrid {
 }
 
 impl BaseGrid<GridlessNode> for GridlessGrid {
-    fn get_adjacent_nodes(&self, node: &GridlessNode, edges: &Edges, offset: Point) -> Vec<(GridlessNode, u32)> {
-        let _ = offset;
-        let _ = edges;
+    fn get_adjacent_nodes(&self, node: &GridlessNode, end_node: &GridlessNode, edges: &Edges, offset: Point) -> Vec<(GridlessNode, u32)> {
         let _ = node;
+        let _ = end_node;
+        let _ = edges;
+        let _ = offset;
 
         Vec::new()
     }

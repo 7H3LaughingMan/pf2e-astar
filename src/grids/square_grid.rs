@@ -19,8 +19,8 @@ impl SquareGrid {
 }
 
 impl BaseGrid<SquareNode> for SquareGrid {
-    fn get_adjacent_nodes(&self, node: &SquareNode, edges: &Edges, offset: Point) -> Vec<(SquareNode, u32)> {
-        node.get_neighbors()
+    fn get_adjacent_nodes(&self, node: &SquareNode, goal: &SquareNode, edges: &Edges, offset: Point) -> Vec<(SquareNode, u32)> {
+        node.get_neighbors(goal)
             .into_iter()
             .filter(|(neighbor, _cost)| !edges.check_collision(self.get_center_point(node) + offset, self.get_center_point(neighbor) + offset))
             .collect()
@@ -89,7 +89,7 @@ impl AStar for SquareGrid {
 
         let result = pathfinding::prelude::astar(
             &start_node,
-            |node| self.get_adjacent_nodes(node, edges, offset),
+            |node| self.get_adjacent_nodes(node, &end_node, edges, offset),
             |node| node.get_distance(&end_node),
             |node| node.at_node(&end_node),
         );
