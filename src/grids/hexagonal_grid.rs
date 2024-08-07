@@ -406,9 +406,9 @@ impl BaseGrid<HexagonalNode> for HexagonalGrid {
         if !token_shape.points.is_empty() {
             let grid_size = Point { x: self.size_x, y: self.size_y };
             let center = token_shape.center * grid_size;
-            let points = token_shape.points.into_iter().map(|point| point * grid_size).collect();
+            let points = token_shape.points.into_iter().map(|point| (point * grid_size) - center).collect();
 
-            return Polygon { center, offset, points };
+            return Polygon { center: Point { x: 0.0, y: 0.0 }, offset, points };
         }
 
         Polygon {
