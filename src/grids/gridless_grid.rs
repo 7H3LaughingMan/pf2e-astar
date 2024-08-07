@@ -1,8 +1,8 @@
 use crate::{
-    exports::Edges,
+    exports::{Edges, TokenShape},
     nodes::GridlessNode,
     traits::{AStar, BaseGrid, Value},
-    types::{Point, Polygon},
+    types::Point,
 };
 use wasm_bindgen::JsValue;
 
@@ -38,7 +38,7 @@ impl BaseGrid<GridlessNode> for GridlessGrid {
         GridlessNode { i: (point.y / size).floor() as i32, j: (point.x / size).floor() as i32 }
     }
 
-    fn get_token_shape(&self, token: JsValue) -> Polygon {
+    fn get_token_shape(&self, token: JsValue) -> TokenShape {
         let token_width: f32;
         let token_height: f32;
 
@@ -53,7 +53,7 @@ impl BaseGrid<GridlessNode> for GridlessGrid {
         let width = token_width * (self.size as f32);
         let height = token_height * (self.size as f32);
 
-        Polygon {
+        TokenShape {
             center: Point { x: 0.0, y: 0.0 },
             offset: Point { x: 0.0, y: 0.0 },
             points: vec![

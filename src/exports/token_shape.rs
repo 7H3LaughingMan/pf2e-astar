@@ -1,16 +1,16 @@
-use super::Point;
+use crate::types::Point;
 use rapier2d::{na::Point2, prelude::Polyline};
 
 #[derive(Clone)]
 #[derive(Debug)]
 #[derive(serde::Deserialize, serde::Serialize)]
-pub struct Polygon {
+pub struct TokenShape {
     pub center: Point,
     pub offset: Point,
     pub points: Vec<Point>,
 }
 
-impl Polygon {
+impl TokenShape {
     pub fn centroid(points: &Vec<Point>) -> Point {
         if points.is_empty() {
             return Point { x: 0_f32, y: 0_f32 };
@@ -38,7 +38,7 @@ impl Polygon {
         Point { x, y }
     }
 
-    pub fn shrink(&self, size: Point) -> Polygon {
+    pub fn shrink(&self, size: Point) -> TokenShape {
         let mut points = Vec::new();
 
         for Point { x, y } in self.points.clone() {
@@ -60,7 +60,7 @@ impl Polygon {
             });
         }
 
-        Polygon { center: self.center, offset: self.offset, points }
+        TokenShape { center: self.center, offset: self.offset, points }
     }
 
     fn get_vertices(&self) -> Vec<Point2<f32>> {

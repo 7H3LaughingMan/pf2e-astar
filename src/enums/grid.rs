@@ -1,9 +1,10 @@
 use wasm_bindgen::JsValue;
 
 use crate::{
+    exports::TokenShape,
     grids::{GridlessGrid, HexagonalGrid, SquareGrid},
     traits::{BaseGrid, Value},
-    types::{Point, Polygon},
+    types::Point,
     GAME,
 };
 
@@ -26,7 +27,7 @@ impl Grid {
         }
     }
 
-    pub fn get_token_shape(&self, token: JsValue) -> Polygon {
+    pub fn get_token_shape(&self, token: JsValue) -> TokenShape {
         match self {
             Grid::Gridless(gridless_grid) => gridless_grid.get_token_shape(token),
             Grid::Square(square_grid) => square_grid.get_token_shape(token),

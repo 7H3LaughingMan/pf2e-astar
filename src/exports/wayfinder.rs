@@ -1,8 +1,8 @@
 use crate::{
     enums::Grid,
-    exports::{Edges, Image},
+    exports::{Edges, Image, TokenShape},
     traits::AStar,
-    types::{Pixel, Point, Polygon, Rectangle},
+    types::{Pixel, Point, Rectangle},
 };
 use rapier2d::prelude::*;
 use wasm_bindgen::prelude::*;
@@ -11,7 +11,7 @@ use wasm_bindgen::prelude::*;
 pub struct Wayfinder {
     grid: Grid,
     edges: Edges,
-    token_shape: Polygon,
+    token_shape: TokenShape,
 }
 
 const SHRINK: Point = Point { x: 0.40, y: 0.40 };

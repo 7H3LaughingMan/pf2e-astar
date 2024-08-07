@@ -1,8 +1,8 @@
 use crate::{
-    exports::Edges,
+    exports::{Edges, TokenShape},
     nodes::SquareNode,
     traits::{AStar, BaseGrid, Node, Value},
-    types::{Point, Polygon},
+    types::Point,
 };
 use wasm_bindgen::JsValue;
 
@@ -36,7 +36,7 @@ impl BaseGrid<SquareNode> for SquareGrid {
         SquareNode { i: (point.y / size).floor() as i32, j: (point.x / size).floor() as i32, d: false }
     }
 
-    fn get_token_shape(&self, token: JsValue) -> Polygon {
+    fn get_token_shape(&self, token: JsValue) -> TokenShape {
         let token_width: f32;
         let token_height: f32;
 
@@ -54,7 +54,7 @@ impl BaseGrid<SquareNode> for SquareGrid {
         let offset =
             if token_width % 2.0 != 1.0 { Point { x: (self.size as f32) / 2.0, y: (self.size as f32) / 2.0 } } else { Point { x: 0.0, y: 0.0 } };
 
-        Polygon {
+        TokenShape {
             center: Point { x: 0.0, y: 0.0 },
             offset,
             points: vec![

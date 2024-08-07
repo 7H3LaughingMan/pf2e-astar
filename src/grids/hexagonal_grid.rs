@@ -1,9 +1,9 @@
 use crate::{
     enums::HexagonalShapes,
-    exports::Edges,
+    exports::{Edges, TokenShape},
     nodes::HexagonalNode,
     traits::{AStar, BaseGrid, Node, Value},
-    types::{Point, Polygon},
+    types::Point,
 };
 use wasm_bindgen::JsValue;
 
@@ -49,15 +49,15 @@ impl HexagonalGrid {
         HexagonalNode { q: iq as i32, r: ir as i32, s: is as i32 }
     }
 
-    fn get_hexagonal_shape(columns: bool, r#type: i32, width: f32, height: f32) -> Polygon {
+    fn get_hexagonal_shape(columns: bool, r#type: i32, width: f32, height: f32) -> TokenShape {
         if columns {
             let row_shape = HexagonalGrid::get_hexagonal_shape(false, r#type, width, height);
             let points = row_shape.points.clone().into_iter().rev().map(|Point { x, y }| Point { x: y, y: x }).collect();
             let center = Point { x: row_shape.center.y, y: row_shape.center.x };
 
-            return Polygon { center, offset: Point { x: 0.0, y: 0.0 }, points };
+            return TokenShape { center, offset: Point { x: 0.0, y: 0.0 }, points };
         } else if (width == 0.5) && (height == 0.5) {
-            return Polygon {
+            return TokenShape {
                 center: Point { x: 0.25, y: 0.25 },
                 offset: Point { x: 0.0, y: 0.0 },
                 points: vec![
@@ -70,7 +70,7 @@ impl HexagonalGrid {
                 ],
             };
         } else if (width == 1.0) && (height == 1.0) {
-            return Polygon {
+            return TokenShape {
                 center: Point { x: 0.5, y: 0.5 },
                 offset: Point { x: 0.0, y: 0.0 },
                 points: vec![
@@ -88,7 +88,7 @@ impl HexagonalGrid {
             return HexagonalGrid::create_hexagonal_rectangle(r#type, width, height);
         }
 
-        Polygon {
+        TokenShape {
             center: Point { x: 0.0, y: 0.0 },
             offset: Point { x: 0.0, y: 0.0 },
             points: vec![
@@ -100,7 +100,7 @@ impl HexagonalGrid {
         }
     }
 
-    fn create_hexagonal_ellipse_or_trapezoid(r#type: i32, width: f32, height: f32) -> Polygon {
+    fn create_hexagonal_ellipse_or_trapezoid(r#type: i32, width: f32, height: f32) -> TokenShape {
         let center = Point { x: 0.0, y: 0.0 };
         let offset = Point { x: 0.0, y: 0.0 };
         let mut points = Vec::new();
@@ -114,7 +114,7 @@ impl HexagonalGrid {
         match r#type {
             0 => {
                 if height >= 2 * width {
-                    return Polygon { center, offset, points };
+                    return TokenShape { center, offset, points };
                 }
 
                 top = height / 2;
@@ -122,7 +122,7 @@ impl HexagonalGrid {
             }
             1 => {
                 if height >= 2 * width {
-                    return Polygon { center, offset, points };
+                    return TokenShape { center, offset, points };
                 }
 
                 top = (height - 1) / 2;
@@ -130,7 +130,7 @@ impl HexagonalGrid {
             }
             2 => {
                 if height > width {
-                    return Polygon { center, offset, points };
+                    return TokenShape { center, offset, points };
                 }
 
                 top = height - 1;
@@ -138,14 +138,14 @@ impl HexagonalGrid {
             }
             3 => {
                 if height > width {
-                    return Polygon { center, offset, points };
+                    return TokenShape { center, offset, points };
                 }
 
                 top = 0;
                 bottom = height - 1;
             }
             _ => {
-                return Polygon { center, offset, points };
+                return TokenShape { center, offset, points };
             }
         }
 
@@ -210,11 +210,11 @@ impl HexagonalGrid {
             y -= 0.5;
         }
 
-        let center = Polygon::centroid(&points);
-        Polygon { center, offset, points }
+        let center = TokenShape::centroid(&points);
+        TokenShape { center, offset, points }
     }
 
-    fn create_hexagonal_rectangle(r#type: i32, width: f32, height: f32) -> Polygon {
+    fn create_hexagonal_rectangle(r#type: i32, width: f32, height: f32) -> TokenShape {
         let center = Point { x: 0.0, y: 0.0 };
         let offset = Point { x: 0.0, y: 0.0 };
         let mut points = Vec::new();
@@ -223,11 +223,11 @@ impl HexagonalGrid {
         let height = height as i32;
 
         if width < 1 || height < 1 {
-            return Polygon { center, offset, points };
+            return TokenShape { center, offset, points };
         }
 
         if (width == 1) && (height > 1) {
-            return Polygon { center, offset, points };
+            return TokenShape { center, offset, points };
         }
 
         let even = (r#type == 4) || (height == 1);
@@ -315,7 +315,7 @@ impl HexagonalGrid {
         }
 
         let center = Point { x: (width as f32) / 2.0, y: ((0.75 * f32::floor(height as f32)) + (0.5 * ((height as f32) % 1.0)) + 0.25) / 2.0 };
-        Polygon { center, offset, points }
+        TokenShape { center, offset, points }
     }
 }
 
@@ -368,7 +368,7 @@ impl BaseGrid<HexagonalNode> for HexagonalGrid {
         HexagonalGrid::cube_round(q, r, 0.0 - q - r)
     }
 
-    fn get_token_shape(&self, token: JsValue) -> Polygon {
+    fn get_token_shape(&self, token: JsValue) -> TokenShape {
         let width: f32;
         let height: f32;
         let hexagonal_shape: i32;
@@ -408,10 +408,10 @@ impl BaseGrid<HexagonalNode> for HexagonalGrid {
             let center = token_shape.center * grid_size;
             let points = token_shape.points.into_iter().map(|point| (point * grid_size) - center).collect();
 
-            return Polygon { center: Point { x: 0.0, y: 0.0 }, offset, points };
+            return TokenShape { center: Point { x: 0.0, y: 0.0 }, offset, points };
         }
 
-        Polygon {
+        TokenShape {
             center: Point { x: 0.0, y: 0.0 },
             offset,
             points: vec![
