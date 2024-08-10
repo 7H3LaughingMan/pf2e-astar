@@ -20,9 +20,9 @@ impl SquareNode {
     pub fn from(&mut self, origin: &SquareNode) {
         let di = (origin.i - self.i).abs();
         let dj = (origin.j - self.j).abs();
-        let nd = i32::min(di, dj) + if origin.d { 1 } else { 0 };
+        let nd = i32::min(di, dj) + origin.d as i32;
 
-        self.d = (nd & 1) == 1;
+        self.d = (nd % 2) == 1;
     }
 }
 
