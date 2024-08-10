@@ -19,9 +19,8 @@ impl GridlessGrid {
 }
 
 impl BaseGrid<GridlessNode> for GridlessGrid {
-    fn get_adjacent_nodes(&self, node: &GridlessNode, end_node: &GridlessNode, edges: &Edges, offset: Point) -> Vec<(GridlessNode, u32)> {
+    fn get_adjacent_nodes(&self, node: &GridlessNode, edges: &Edges, offset: Point) -> Vec<(GridlessNode, u32)> {
         let _ = node;
-        let _ = end_node;
         let _ = edges;
         let _ = offset;
 
@@ -31,13 +30,6 @@ impl BaseGrid<GridlessNode> for GridlessGrid {
     fn get_center_point(&self, GridlessNode { i, j }: &GridlessNode) -> Point {
         let half_size = (self.size as f32) / 2.0;
         Point { x: ((j * self.size) as f32) + half_size, y: ((i * self.size) as f32) + half_size }
-    }
-
-    fn get_direct_path(&self, start: &GridlessNode, end: &GridlessNode) -> Vec<GridlessNode> {
-        let _ = start;
-        let _ = end;
-
-        Vec::new()
     }
 
     fn get_node(&self, point: Point) -> GridlessNode {

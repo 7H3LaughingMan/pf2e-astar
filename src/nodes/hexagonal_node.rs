@@ -16,25 +16,6 @@ impl HexagonalNode {
     pub fn new(q: i32, r: i32, s: i32) -> Self {
         Self { q, r, s }
     }
-
-    pub fn round(q: f32, r: f32, s: f32) -> HexagonalNode {
-        let mut iq = q.round();
-        let mut ir = r.round();
-        let mut is = s.round();
-        let dq = (iq - q).abs();
-        let dr = (ir - r).abs();
-        let ds = (is - s).abs();
-
-        if (dq > dr) && (dq > ds) {
-            iq = -ir - is;
-        } else if dr > ds {
-            ir = -iq - iq;
-        } else {
-            is = -iq - ir;
-        }
-
-        HexagonalNode { q: iq as i32, r: ir as i32, s: is as i32 }
-    }
 }
 
 impl Node for HexagonalNode {
