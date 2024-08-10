@@ -25,3 +25,7 @@ macro_rules! log {
 fn start() {
     console_error_panic_hook::set_once();
 }
+
+pub fn mix(a: f32, b: f32, w: f32) -> f32 {
+    a * (1.0 - w) + b * w
+}

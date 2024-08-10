@@ -33,6 +33,13 @@ impl BaseGrid<GridlessNode> for GridlessGrid {
         Point { x: ((j * self.size) as f32) + half_size, y: ((i * self.size) as f32) + half_size }
     }
 
+    fn get_direct_path(&self, start: &GridlessNode, end: &GridlessNode) -> Vec<GridlessNode> {
+        let _ = start;
+        let _ = end;
+
+        Vec::new()
+    }
+
     fn get_node(&self, point: Point) -> GridlessNode {
         let size = self.size as f32;
         GridlessNode { i: (point.y / size).floor() as i32, j: (point.x / size).floor() as i32 }

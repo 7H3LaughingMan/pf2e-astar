@@ -3,7 +3,7 @@ use crate::{
     exports::{Edges, TokenShape},
     nodes::HexagonalNode,
     traits::{AStar, BaseGrid, Node, Value},
-    types::Point,
+    types::{Overflow, Point},
 };
 use wasm_bindgen::JsValue;
 
@@ -321,7 +321,23 @@ impl HexagonalGrid {
 
 impl BaseGrid<HexagonalNode> for HexagonalGrid {
     fn get_adjacent_nodes(&self, node: &HexagonalNode, end_node: &HexagonalNode, edges: &Edges, offset: Point) -> Vec<(HexagonalNode, u32)> {
-        node.get_neighbors(end_node)
+        let neighbors = node.get_neighbors();
+
+        let path = self.get_direct_path(node, end_node);
+        let next_neighbor = if path.len() > 1 { path[1] } else { path[0] };
+        let index = neighbors.iter().position(|(node, _)| node.at_node(&next_neighbor)).unwrap_or(0);
+        let i = Overflow { value: index, limit: 5 };
+
+        let neighbors = vec![
+            neighbors[i.value],
+            neighbors[(i + 3).value],
+            neighbors[(i + 2).value],
+            neighbors[(i + 4).value],
+            neighbors[(i + 1).value],
+            neighbors[(i + 5).value],
+        ];
+
+        neighbors
             .into_iter()
             .filter(|(neighbor, _cost)| !edges.check_collision(self.get_center_point(node) + offset, self.get_center_point(neighbor) + offset))
             .collect()
@@ -346,6 +362,52 @@ impl BaseGrid<HexagonalNode> for HexagonalGrid {
         y *= self.size as f32;
 
         Point { x, y }
+    }
+
+    fn get_direct_path(&self, start: &HexagonalNode, end: &HexagonalNode) -> Vec<HexagonalNode> {
+        let HexagonalNode { q: q0, r: r0, s: _ } = *start;
+        let HexagonalNode { q: q1, r: r1, s: _ } = *end;
+        let mut path = vec![*start];
+
+        if q0 == q1 && r0 == r1 {
+            return path;
+        }
+
+        let dq = q0 - q1;
+        let dr = r0 - r1;
+        let eps = 0.000001_f32;
+        let mut eq = 0.0_f32;
+        let mut er = 0.0_f32;
+
+        if self.columns {
+            if dq == dr {
+                er = if (q0 % 2 == 0) == self.even { eps } else { -eps };
+                eq = -er;
+            } else if -2 * dq == dr {
+                eq = if (q0 % 2 == 0) == self.even { eps } else { -eps };
+            } else if dq == -2 * dr {
+                er = if (q0 % 2 == 0) == self.even { eps } else { -eps };
+            }
+        } else if dq == dr {
+            eq = if (r0 % 2 == 0) == self.even { eps } else { -eps };
+            er = -eq;
+        } else if dq == -2 * dr {
+            er = if (r0 % 2 == 0) == self.even { eps } else { -eps };
+        } else if -2 * dq == dr {
+            eq = if (r0 % 2 == 0) == self.even { eps } else { -eps };
+        }
+
+        let n = start.get_distance(end);
+        for j in 1..n {
+            let t = (j as f32 + eps) / n as f32;
+            let q = crate::mix(q0 as f32, q1 as f32, t) + eq;
+            let r = crate::mix(r0 as f32, r1 as f32, t) + er;
+            let s = 0.0 - q - r;
+            path.push(HexagonalNode::round(q, r, s));
+        }
+        path.push(*end);
+
+        path
     }
 
     fn get_node(&self, point: Point) -> HexagonalNode {

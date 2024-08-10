@@ -24,9 +24,7 @@ impl Node for GridlessNode {
         0
     }
 
-    fn get_neighbors(&self, goal: &Self) -> Vec<(Self, u32)> {
-        let _ = goal;
-
+    fn get_neighbors(&self) -> Vec<(Self, u32)> {
         Vec::new()
     }
 }

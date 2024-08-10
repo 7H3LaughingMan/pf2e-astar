@@ -16,6 +16,25 @@ impl HexagonalNode {
     pub fn new(q: i32, r: i32, s: i32) -> Self {
         Self { q, r, s }
     }
+
+    pub fn round(q: f32, r: f32, s: f32) -> HexagonalNode {
+        let mut iq = q.round();
+        let mut ir = r.round();
+        let mut is = s.round();
+        let dq = (iq - q).abs();
+        let dr = (ir - r).abs();
+        let ds = (is - s).abs();
+
+        if (dq > dr) && (dq > ds) {
+            iq = -ir - is;
+        } else if dr > ds {
+            ir = -iq - iq;
+        } else {
+            is = -iq - ir;
+        }
+
+        HexagonalNode { q: iq as i32, r: ir as i32, s: is as i32 }
+    }
 }
 
 impl Node for HexagonalNode {
@@ -30,20 +49,16 @@ impl Node for HexagonalNode {
         ((dq.abs() + dr.abs() + (dq + dr).abs()) / 2) as u32
     }
 
-    fn get_neighbors(&self, end_node: &Self) -> Vec<(Self, u32)> {
+    fn get_neighbors(&self) -> Vec<(Self, u32)> {
         let HexagonalNode { q, r, s } = *self;
 
-        let mut neighbors = vec![
+        vec![
             (HexagonalNode::new(q, r - 1, s + 1), 1),
             (HexagonalNode::new(q + 1, r - 1, s), 1),
             (HexagonalNode::new(q + 1, r, s - 1), 1),
             (HexagonalNode::new(q, r + 1, s - 1), 1),
             (HexagonalNode::new(q - 1, r + 1, s), 1),
             (HexagonalNode::new(q - 1, r, s + 1), 1),
-        ];
-
-        neighbors.sort_by(|a, b| a.0.get_distance(end_node).partial_cmp(&b.0.get_distance(end_node)).unwrap());
-
-        neighbors
+        ]
     }
 }
