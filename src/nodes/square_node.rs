@@ -32,14 +32,10 @@ impl Node for SquareNode {
     }
 
     fn get_distance(&self, other: &Self) -> u32 {
-        let di = (self.i - other.i).abs();
-        let dj = (self.j - other.j).abs();
+        let di = (self.i - other.i).abs() as u32;
+        let dj = (self.j - other.j).abs() as u32;
 
-        let ns = (di - dj).abs();
-        let nd = i32::min(di, dj);
-        let cd = if self.d { ((nd + 1) & -2) + (nd >> 1) } else { (nd & -2) + ((nd + 1) >> 1) };
-
-        (ns + cd) as u32
+        di + dj - (u32::min(di, dj) + 1 - (self.d as u32) >> 1)
     }
 
     fn get_neighbors(&self) -> Vec<(Self, u32)> {
