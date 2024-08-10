@@ -1,5 +1,4 @@
 pub mod edge;
-pub mod overflow;
 pub mod pixel;
 pub mod point;
 pub mod rectangle;
